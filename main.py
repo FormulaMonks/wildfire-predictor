@@ -17,24 +17,17 @@ app.add_middleware(
 )
 
 
-def is_wildfire_possible(date: str, latitude: float, longitude: float) -> bool:
-    # Perform your logic to determine if a wildfire is possible
-    # based on the provided date, latitude, and longitude.
-    # You can replace this with your own implementation.
-    # For demonstration purposes, let's assume wildfires are possible
-    # if the month is July, August, or September.
+# Load the trained Isolation Forest model
+loaded_model = joblib.load('isolation_forest_model.pkl')
 
-    # Convert the input date string to a datetime object
-    date_obj = datetime.strptime(date, "%Y-%m-%d")
-
-    # Extract the month from the date
-    month = date_obj.month
-
-    # Check if the month is July, August, or September
-    if month in [7, 8, 9]:
-        return True
-    else:
-        return False
+def is_wildfire_possible(latitude: float, longitude: float):
+    # Assuming the 'latitude_longitude_data' is already loaded and preprocessed
+    input_data = pd.DataFrame({'latitude': [latitude], 'longitude': [longitude]})
+    
+    # Predict using the loaded Isolation Forest model
+    anomaly_pred = loaded_model.predict(input_data)
+    
+    return anomaly_pred[0]  # Return the prediction for the input data
 
 
 @app.get("/wildfire")
