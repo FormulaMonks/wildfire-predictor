@@ -4,6 +4,7 @@ from datetime import datetime
 import joblib
 import sys
 import uvicorn
+import pandas as pd
 
 app = FastAPI()
 
@@ -32,8 +33,8 @@ def is_wildfire_possible(latitude: float, longitude: float):
 
 
 @app.get("/wildfire")
-def check_wildfire(date: str, latitude: float, longitude: float):
-    wildfire_possible = is_wildfire_possible(date, latitude, longitude)
+def check_wildfire(latitude: float, longitude: float):
+    wildfire_possible = is_wildfire_possible(latitude, longitude)
 
     if wildfire_possible:
         return {"wildfire": "Possible"}
